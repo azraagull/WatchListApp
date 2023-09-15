@@ -8,9 +8,8 @@ const host = "moviesdatabase.p.rapidapi.com";
 const limitPerPage = 50;
 const totalPages = 50;
 
-  router.get("/actors", async (req, res) => {
-    let allActors =[];
-    for (let page = 1; page <= totalPages; page++) {
+for (let page = 1; page <= totalPages; page++) {
+  router.get(`/actors/${page}`, async (req, res) => {
     const options = {
       method: "GET",
       url: "https://moviesdatabase.p.rapidapi.com/actors",
@@ -27,15 +26,13 @@ const totalPages = 50;
     try {
       const response = await axios.request(options);
       const actors = response.data.results;
-      allActors = allActors.concat(actors);
       await Actor.insertMany(actors);
+      res.json(response.data);
     } catch (error) {
       console.error("Hata:", error);
       return res.status(500).json({ error: "Veri çekme hatası" });
     }
-  }
-  res.json(allActors);
   });
-
+}
 
 module.exports = router;
