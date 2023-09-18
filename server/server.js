@@ -12,16 +12,14 @@ const movieRoute = require("./src/api/routes/movies.js");
 const categoryRoute = require("./src/api/routes/categories.js");
 
 dotenv.config();
-const connect = async () => {
-  try {
-    await mongoose.connect(
-      "mongodb+srv://azra:v2oYtxHemMQ4MHTM@cluster0.r8ydkmh.mongodb.net/?retryWrites=true&w=majority"
-    );
-    console.log("Connected to mongoDB");
-  } catch (error) {
-    throw error;
-  }
-};
+mongoose.connect(
+  "mongodb+srv://azra:v2oYtxHemMQ4MHTM@cluster0.r8ydkmh.mongodb.net/?retryWrites=true&w=majority",
+  { useNewUrlParser: true, useUnifiedTopology: true }
+).then(() => {
+  console.log("Connected to mongoDB");
+}).catch((error) => {
+  console.error("MongoDB Connection Error:", error);
+});
 
 //middleware
 app.use(express.json());
@@ -32,6 +30,5 @@ app.use("/api", movieRoute);
 app.use("/api", categoryRoute);
 
 app.listen(port, () => {
-  connect();
   console.log(`Server ${port} portunda çalışıyor.`);
 });

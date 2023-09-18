@@ -9,32 +9,40 @@ const limitPerPage = 50;
 const totalPages = 50;
 
 router.get("/actors", async (req, res) => {
-  let allActors = [];
-  for (let page = 1; page <= totalPages; page++) {
-    const options = {
-      method: "GET",
-      url: "https://moviesdatabase.p.rapidapi.com/actors",
-      params: {
-        page: page,
-        limit: limitPerPage,
-      },
-      headers: {
-        "X-RapidAPI-Key": apiKey,
-        "X-RapidAPI-Host": host,
-      },
-    };
+  try {
+    const existingActors = await Actor.find({});
+    if (existingActors.length > 0) {
+      return res.json(existingActors);
+    }
 
-    try {
+    let allActors = [];
+    for (let page = 1; page <= totalPages; page++) {
+      const options = {
+        method: "GET",
+        url: "https://moviesdatabase.p.rapidapi.com/actors",
+        params: {
+          page: page,
+          limit: limitPerPage,
+        },
+        headers: {
+          "X-RapidAPI-Key": apiKey,
+          "X-RapidAPI-Host": host,
+        },
+      };
+
       const response = await axios.request(options);
       const actors = response.data.results;
       allActors = allActors.concat(actors);
-    } catch (error) {
-      console.error("Hata:", error);
-      return res.status(500).json({ error: "Veri çekme hatası" });
     }
+
+    await Actor.insertMany(allActors);
+
+
+    res.json(allActors);
+  } catch (error) {
+    console.error("Hata:", error);
+    return res.status(500).json({ error: "Veri çekme hatası" });
   }
-  res.json(allActors);
-  await Actor.insertMany(allActors);
 });
 
 router.get("/actors/:id", async (req, res) => {

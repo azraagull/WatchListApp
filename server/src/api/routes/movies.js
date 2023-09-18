@@ -7,6 +7,11 @@ const limitPerPage = 50;
 const totalPages = 50;
 
 router.get("/movies", async (req, res) => {
+  try {
+    const existingMovies = await Movie.find({});
+    if (existingMovies.length > 0) {
+      return res.json(existingMovies);
+    }
   let allMovies = [];
   for (let page = 1; page <= totalPages; page++) {
     const options = {
@@ -22,18 +27,19 @@ router.get("/movies", async (req, res) => {
         "X-RapidAPI-Host": "moviesdatabase.p.rapidapi.com",
       },
     };
-
-    try {
       const response = await axios.request(options);
       const movies = response.data.results;
       allMovies = allMovies.concat(movies);
-    } catch (error) {
-      console.error("Hata:", error);
-      return res.status(500).json({ error: "Veri çekme hatası" });
-    }
-  }
-  res.json(allMovies);
+    } 
+    
   await Movie.insertMany(allMovies);
+
+
+  res.json(allMovies);
+  } catch (error) {
+    console.error("Hata:", error);
+    return res.status(500).json({ error: "Veri çekme hatası" });
+  }
 });
 
 router.get("/movies/:id", async (req, res) => {
