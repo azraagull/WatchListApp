@@ -1,33 +1,25 @@
-const mongoose = require("mongoose");
 const express = require("express");
-const dotenv = require("dotenv");
-
-const app = express();
 const cors = require("cors");
-const port = process.env.PORT || 5500;
+const dotenv = require("dotenv");
+const { connectToDatabase } = require("./src/config/database.js");
 
-//routes
 const actorRoute = require("./src/api/routes/actors.js");
 const movieRoute = require("./src/api/routes/movies.js");
 const categoryRoute = require("./src/api/routes/categories.js");
 
 dotenv.config();
-mongoose.connect(
-  "mongodb+srv://azra:v2oYtxHemMQ4MHTM@cluster0.r8ydkmh.mongodb.net/?retryWrites=true&w=majority",
-  { useNewUrlParser: true, useUnifiedTopology: true }
-).then(() => {
-  console.log("Connected to mongoDB");
-}).catch((error) => {
-  console.error("MongoDB Connection Error:", error);
-});
 
-//middleware
+const app = express();
+const port = process.env.PORT || 5500;
+
 app.use(express.json());
 app.use(cors());
 
 app.use("/api", actorRoute);
 app.use("/api", movieRoute);
 app.use("/api", categoryRoute);
+
+connectToDatabase();
 
 app.listen(port, () => {
   console.log(`Server ${port} portunda çalışıyor.`);
