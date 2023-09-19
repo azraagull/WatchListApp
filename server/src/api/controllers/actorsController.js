@@ -68,3 +68,4 @@ exports.getActorById = async (req, res) => {
     return res.status(500).json({ error: "Veri çekme hatası" });
   }
 };
+

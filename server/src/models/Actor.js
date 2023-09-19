@@ -7,7 +7,8 @@ const ActorSchema = new mongoose.Schema({
   deathYear: String,
   primaryProfession: String,
   knownForTitles: String,
-});
+}, {timestamps:true}
+);
 
 const Actor = mongoose.model("actors", ActorSchema);
 module.exports = Actor;

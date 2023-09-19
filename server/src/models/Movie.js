@@ -33,7 +33,7 @@ const MovieSchema = new mongoose.Schema({
     month: Number,
     year: Number
   }
-});
+}, {timestamps:true});
 
 const Movie = mongoose.model("movies", MovieSchema);
 module.exports = Movie;
