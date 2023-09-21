@@ -9,14 +9,20 @@ const totalPages = 50;
 
 exports.getActors = async (req, res) => {
   try {
-    const existingActors = await Actor.find({});
-    if (existingActors.length > 0) {
+    const page = req.query.page || 1; //http://localhost:5500/api/actors?page=3
+    const paginateOptions = {
+      page: page,
+      limit: limitPerPage,
+    };
+
+    const existingActors = await Actor.paginate({}, paginateOptions);
+    if (existingActors.docs.length > 0) {
       return res.json(existingActors);
     }
 
     let allActors = [];
     for (let page = 1; page <= totalPages; page++) {
-      const options = {
+      const apiOptions = {
         method: "GET",
         url: "https://moviesdatabase.p.rapidapi.com/actors",
         params: {
@@ -29,7 +35,7 @@ exports.getActors = async (req, res) => {
         },
       };
 
-      const response = await axios.request(options);
+      const response = await axios.request(apiOptions);
       const actors = response.data.results;
       allActors = allActors.concat(actors);
     }
@@ -68,4 +74,3 @@ exports.getActorById = async (req, res) => {
     return res.status(500).json({ error: "Veri çekme hatası" });
   }
 };
-

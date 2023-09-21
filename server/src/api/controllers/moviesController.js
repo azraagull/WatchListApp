@@ -9,13 +9,20 @@ const totalPages = 50;
 
 exports.getMovies = async (req, res) => {
   try {
-    const existingMovies = await Movie.find({});
-    if (existingMovies.length > 0) {
+    const page = req.query.page || 1; //http://localhost:5500/api/movies?page=3
+    const paginateOptions = {
+      page: page,
+      limit: limitPerPage,
+    };
+
+    const existingMovies = await Movie.paginate({}, paginateOptions);
+    if (existingMovies.docs.length > 0) {
       return res.json(existingMovies);
     }
+
     let allMovies = [];
     for (let page = 1; page <= totalPages; page++) {
-      const options = {
+      const apiOptions = {
         method: "GET",
         url: "https://moviesdatabase.p.rapidapi.com/titles",
         params: {
@@ -28,13 +35,13 @@ exports.getMovies = async (req, res) => {
           "X-RapidAPI-Host": host,
         },
       };
-      const response = await axios.request(options);
+
+      const response = await axios.request(apiOptions);
       const movies = response.data.results;
       allMovies = allMovies.concat(movies);
     }
 
     await Movie.insertMany(allMovies);
-
     res.json(allMovies);
   } catch (error) {
     console.error("Hata:", error);
