@@ -54,10 +54,10 @@ exports.getMovieById = async (req, res) => {
 
   const options = {
     method: "GET",
-    url: `https://moviesdatabase.p.rapidapi.com/titles/${movieId}`,
+    url: `https://moviesminidatabase.p.rapidapi.com/series/id/${movieId}/`,
     headers: {
       "X-RapidAPI-Key": apiKey,
-      "X-RapidAPI-Host": host,
+      "X-RapidAPI-Host": "moviesminidatabase.p.rapidapi.com",
     },
   };
 
