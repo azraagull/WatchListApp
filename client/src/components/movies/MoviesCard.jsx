@@ -1,122 +1,46 @@
-import React from "react";
-import { Card, Pagination } from "antd";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Card, Pagination } from 'antd';
 
 const { Meta } = Card;
 
-const MovieCard = () => {
-  // Örnek film verileri
-  const movies = [
-    {
-      title: "Europe Street Beat 1",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 2",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 1",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 2",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 1",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 2",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 1",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 2",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 1",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 2",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 1",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 2",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 1",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 2",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 1",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 2",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 1",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 2",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 1",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-    {
-      title: "Europe Street Beat 2",
-      imageUrl: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    },
-  ];
+const ActorList = () => {
+  const [actors, setActors] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 12; // Her sayfada gösterilecek aktör sayısı
 
-  // Sayfa numarası ve her sayfada gösterilecek kart sayısı
-  const pageSize = 12; // 2 sıra x 4 sütun = 8 kart
-  const [currentPage, setCurrentPage] = React.useState(1);
+  useEffect(() => {
+    // Sunucu tarafındaki API rotasını çağıralım
+    axios.get('/api/actors') // Sunucu tarafında belirttiğiniz API rotasına göre güncelleyin
+      .then((response) => {
+        // API'den gelen aktör verilerini state'e kaydedelim
+        setActors(response.data);
+      })
+      .catch((error) => {
+        console.error('Veri çekme hatası:', error);
+      });
+  }, []);
 
-  // Şu anki sayfadaki filmleri hesapla
-  const currentMovies = movies.slice(
+  const currentActors = actors.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
 
-  // Kartların boyutunu küçültmek için kullanılan stil
   const cardStyle = {
-    width: "150px", // Genişlik
-    height: "250px", // Yükseklik
+    width: '200px', // Genişlik
+    marginBottom: '20px', // Alt boşluk
   };
 
   return (
     <div className="container mx-auto mt-4 mb-4">
-      {" "}
-      {/* Üstten ve alttan boşluk ekleyin */}
       <div className="flex flex-wrap">
-        {currentMovies.map((movie, index) => (
-          <div key={index} className="p-5">
+        {currentActors.map((actor) => (
+          <div key={actor._id} className="p-5">
             <Card
               hoverable
               style={cardStyle}
-              cover={<img alt="example" src={movie.imageUrl} />}
             >
-              <Meta title={movie.title} />
+              <Meta title={actor.primaryName} description={`Profession: ${actor.primaryProfession}`} />
             </Card>
           </div>
         ))}
@@ -124,7 +48,7 @@ const MovieCard = () => {
       <div className="mt-4 flex justify-center">
         <Pagination
           current={currentPage}
-          total={movies.length}
+          total={actors.length}
           pageSize={pageSize}
           onChange={(page) => setCurrentPage(page)}
         />
@@ -133,4 +57,4 @@ const MovieCard = () => {
   );
 };
 
-export default MovieCard;
+export default ActorList;

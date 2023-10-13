@@ -40,12 +40,62 @@ exports.getMovies = async (req, res) => {
       const movies = response.data.results;
       allMovies = allMovies.concat(movies);
     }
-
-    await Movie.insertMany(allMovies);
-    res.json(allMovies);
+    const transformedMovies = allMovies.map((movie) => {
+      return {
+        imdbId: movie.id,
+        titleType: movie.titleType.text,
+        name: movie.titleText.text
+      };
+    });
+    await Movie.insertMany(transformedMovies);
+    res.json(transformedMovies);
   } catch (error) {
     console.error("Hata:", error);
     return res.status(500).json({ error: "Veri çekme hatası" });
+  }
+};
+exports.getMovieDetails = async (req, res) => {
+  try {
+    const movies = await Movie.find(); // Movie koleksiyonundaki tüm filmleri getir
+    // const apiKey = 'e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b';
+    const apiKey = 'a3a60537';
+
+
+    let errorCount = 0; // Hata sayacı
+
+    for (let i = 0; i < 1000; i++) {
+      const movieId = movies[i].imdbId; // Koleksiyondaki filmin OMDb ID'sini alın
+      const options = {
+        method: 'GET',
+        url: `http://www.omdbapi.com/?i=${movieId}&apikey=${apiKey}`,
+        // url: `https://moviesminidatabase.p.rapidapi.com/movie/id/${movieId}`,
+        // headers: {
+        //   'X-RapidAPI-Key': apiKey,
+        //   'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com'
+        // }
+      };
+
+      try {
+        const response = await axios.request(options);
+        const movieDetails = response.data;
+
+        // Movie modelinizde details alanını güncelleyin
+        await Movie.updateOne({ imdbId: movieId }, { $set: { year: movieDetails.Year, released: movieDetails.Released, runTime: movieDetails.Runtime, poster: movieDetails.Poster, rating: movieDetails.imdbRating, vote: movieDetails.imdbVotes, genres: movieDetails.Genre, plot:movieDetails.Plot,
+        director: movieDetails.Director, Writer: movieDetails.Writer, actors: movieDetails.Actors } });
+      } catch (error) {
+        console.error(`ID ${movieId} için hata: `, error);
+        errorCount++; // Hata sayacını artırın
+      }
+    }
+
+    if (errorCount === 0) {
+      res.json({ message: 'Detaylar başarıyla eklendi' });
+    } else {
+      res.status(500).json({ error: `Toplam ${errorCount} filmde hata oluştu` });
+    }
+  } catch (error) {
+    console.error('Hata:', error);
+    return res.status(500).json({ error: 'Detayları alma hatası' });
   }
 };
 

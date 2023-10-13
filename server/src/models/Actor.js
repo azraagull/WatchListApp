@@ -12,7 +12,7 @@ const ActorSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-ActorSchema.plugin(mongoosePaginate);
 
+ActorSchema.plugin(mongoosePaginate);
 const Actor = mongoose.model("actors", ActorSchema);
 module.exports = Actor;

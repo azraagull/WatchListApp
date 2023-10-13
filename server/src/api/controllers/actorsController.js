@@ -9,7 +9,7 @@ const totalPages = 50;
 
 exports.getActors = async (req, res) => {
   try {
-    const page = req.query.page || 1; //http://localhost:5500/api/actors?page=3
+    const page = req.query.page || 1; //http://localhost:5500/api/movies?page=3
     const paginateOptions = {
       page: page,
       limit: limitPerPage,

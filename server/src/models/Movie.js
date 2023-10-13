@@ -3,38 +3,20 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 
 const MovieSchema = new mongoose.Schema(
   {
-    _id: String,
-    id: String,
-    primaryImage: {
-      id: String,
-      width: Number,
-      height: Number,
-      url: String,
-      caption: {
-        plainText: String,
-      },
-    },
-    titleType: {
-      text: String,
-      id: String,
-      isSeries: Boolean,
-      isEpisode: Boolean,
-    },
-    titleText: {
-      text: String,
-    },
-    originalTitleText: {
-      text: String,
-    },
-    releaseYear: {
-      year: Number,
-      endYear: Number,
-    },
-    releaseDate: {
-      day: Number,
-      month: Number,
-      year: Number,
-    },
+    imdbId: { type: String, required: true},
+    titleType: { type: String, required: true },
+    name: { type: String, required: true },
+    year: { type: String },
+    released: { type: String },
+    runTime: { type: String },
+    poster: { type: String },
+    rating: { type: String },
+    vote: { type: String },
+    genres: { type: String },
+    plot: { type: String },
+    director: { type: String },
+    writer: { type: String },
+    actors: { type: String }
   },
   { timestamps: true }
 );
