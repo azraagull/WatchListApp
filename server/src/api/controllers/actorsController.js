@@ -47,6 +47,47 @@ exports.getActors = async (req, res) => {
     return res.status(500).json({ error: "Veri çekme hatası" });
   }
 };
+exports.getActorDetails = async (req, res) => {
+  try {
+    const actors = await Actor.find(); // Movie koleksiyonundaki tüm filmleri getir
+    const apiKey = 'e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b';
+
+
+    let errorCount = 0; // Hata sayacı
+
+    for (let i = 150; i < 400; i++) {
+      const actorId = actors[i].nconst; // Koleksiyondaki filmin OMDb ID'sini alın
+      const options = {
+        method: 'GET',
+        url: `https://moviesminidatabase.p.rapidapi.com/actor/id/${actorId}`,
+        headers: {
+          'X-RapidAPI-Key': apiKey,
+          'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com'
+        }
+      };
+
+      try {
+        const response = await axios.request(options);
+        const actorDetails = response.data.results;
+
+        // Movie modelinizde details alanını güncelleyin
+        await Actor.updateOne({ nconst: actorId }, { $set: { image: actorDetails.image_url,birthDate: actorDetails.birth_date, birthPlace: actorDetails.birth_place,height: actorDetails.height,sign: actorDetails.star_sign,details: actorDetails.partial_bio} });
+      } catch (error) {
+        console.error(`ID ${actorId} için hata: `, error);
+        errorCount++; // Hata sayacını artırın
+      }
+    }
+
+    if (errorCount === 0) {
+      res.json({ message: 'Detaylar başarıyla eklendi' });
+    } else {
+      res.status(500).json({ error: `Toplam ${errorCount} filmde hata oluştu` });
+    }
+  } catch (error) {
+    console.error('Hata:', error);
+    return res.status(500).json({ error: 'Detayları alma hatası' });
+  }
+};
 
 exports.getActorById = async (req, res) => {
   const actorId = req.params.id;

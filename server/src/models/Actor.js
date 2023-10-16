@@ -9,6 +9,12 @@ const ActorSchema = new mongoose.Schema(
     deathYear: String,
     primaryProfession: String,
     knownForTitles: String,
+    image:String,
+    birthDate:String,
+    birthPlace:String,
+    height:String,
+    sign:String,
+    details:String
   },
   { timestamps: true }
 );
