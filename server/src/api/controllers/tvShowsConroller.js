@@ -63,7 +63,7 @@ exports.getTvShowDetails = async (req, res) => {
 
     let errorCount = 0; // Hata sayacı
 
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 2000; i < 1000; i++) {
       const tvShowId = tvShows[i].imdbId; // Koleksiyondaki filmin OMDb ID'sini alın
       const options = {
         method: 'GET',

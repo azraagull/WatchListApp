@@ -55,7 +55,7 @@ exports.getActorDetails = async (req, res) => {
 
     let errorCount = 0; // Hata sayacı
 
-    for (let i = 150; i < 400; i++) {
+    for (let i = 1200; i < 1600; i++) {
       const actorId = actors[i].nconst; // Koleksiyondaki filmin OMDb ID'sini alın
       const options = {
         method: 'GET',
@@ -88,13 +88,94 @@ exports.getActorDetails = async (req, res) => {
     return res.status(500).json({ error: 'Detayları alma hatası' });
   }
 };
+exports.getActorMoviesKnownFor = async (req, res) => {
+  try {
+    const actors = await Actor.find(); // Movie koleksiyonundaki tüm filmleri getir
+    const apiKey = 'e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b';
 
+
+    let errorCount = 0; // Hata sayacı
+
+    for (let i = 0; i < 10; i++) {
+      const actorId = actors[i].nconst; // Koleksiyondaki filmin OMDb ID'sini alın
+      const options = {
+        method: 'GET',
+        url: `https://moviesminidatabase.p.rapidapi.com/actor/id/${actorId}/movies_knownFor/`,
+        headers: {
+          'X-RapidAPI-Key': apiKey,
+          'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com'
+        }
+      };
+
+      try {
+        const response = await axios.request(options);
+        const actorData = response.data.results.map(result => result[0]);
+
+        // Movie modelinizde details alanını güncelleyin
+        await Actor.updateOne({ nconst: actorId }, { $set: { moviesKnownFor: actorData} });
+      } catch (error) {
+        console.error(`ID ${actorId} için hata: `, error);
+        errorCount++; // Hata sayacını artırın
+      }
+    }
+
+    if (errorCount === 0) {
+      res.json({ message: 'Bilindiği filmler başarıyla eklendi' });
+    } else {
+      res.status(500).json({ error: `Toplam ${errorCount} veride hata oluştu` });
+    }
+  } catch (error) {
+    console.error('Hata:', error);
+    return res.status(500).json({ error: 'Bilindiği filmleri alma hatası' });
+  }
+};
+exports.getActorSeriesKnownFor = async (req, res) => {
+  try {
+    const actors = await Actor.find(); // Movie koleksiyonundaki tüm filmleri getir
+    const apiKey = 'e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b';
+
+
+    let errorCount = 0; // Hata sayacı
+
+    for (let i = 0; i < 10; i++) {
+      const actorId = actors[i].nconst; // Koleksiyondaki filmin OMDb ID'sini alın
+      const options = {
+        method: 'GET',
+        url: `https://moviesminidatabase.p.rapidapi.com/actor/id/${actorId}/series_knownFor/`,
+        headers: {
+          'X-RapidAPI-Key': apiKey,
+          'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com'
+        }
+      };
+
+      try {
+        const response = await axios.request(options);
+        const actorData = response.data.results.map(result => result[0]);
+
+        // Movie modelinizde details alanını güncelleyin
+        await Actor.updateOne({ nconst: actorId }, { $set: { seriesKnownFor: actorData} });
+      } catch (error) {
+        console.error(`ID ${actorId} için hata: `, error);
+        errorCount++; // Hata sayacını artırın
+      }
+    }
+
+    if (errorCount === 0) {
+      res.json({ message: 'Bilindiği diziler başarıyla eklendi' });
+    } else {
+      res.status(500).json({ error: `Toplam ${errorCount} veride hata oluştu` });
+    }
+  } catch (error) {
+    console.error('Hata:', error);
+    return res.status(500).json({ error: 'Bilindiği dizileri alma hatası' });
+  }
+};
 exports.getActorById = async (req, res) => {
   const actorId = req.params.id;
 
   const options = {
     method: "GET",
-    url: `https://moviesminidatabase.p.rapidapi.com/actor/id/${actorId}`,
+    url: `https://moviesminidatabase.p.rapidapi.com/actor/id/nm0000136/movies_knownFor/`,
     headers: {
       "X-RapidAPI-Key": apiKey,
       "X-RapidAPI-Host": "moviesminidatabase.p.rapidapi.com",
@@ -103,7 +184,7 @@ exports.getActorById = async (req, res) => {
 
   try {
     const response = await axios.request(options);
-    const actorData = response.data;
+    const actorData = response.data.results.map(result => result[0]);;
 
     if (!actorData) {
       return res.status(404).json({ error: "Aktör bulunamadı" });

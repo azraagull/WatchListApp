@@ -14,7 +14,9 @@ const ActorSchema = new mongoose.Schema(
     birthPlace:String,
     height:String,
     sign:String,
-    details:String
+    details:String,
+    moviesKnownFor:Array,
+    seriesKnownFor:Array
   },
   { timestamps: true }
 );

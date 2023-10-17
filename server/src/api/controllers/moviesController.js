@@ -63,7 +63,7 @@ exports.getMovieDetails = async (req, res) => {
 
     let errorCount = 0; // Hata sayacı
 
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 1000; i < 2000; i++) {
       const movieId = movies[i].imdbId; // Koleksiyondaki filmin OMDb ID'sini alın
       const options = {
         method: 'GET',
