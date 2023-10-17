@@ -16,9 +16,10 @@ const Footer = () => {
           <div className="col-span-1">
             <h2 className="text-2xl font-semibold text-pink-600 mb-4">Quick Links</h2>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">Home</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">Movies</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">Tv-Shows</a></li>
+              <li><a href="/home" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">Home</a></li>
+              <li><a href="/movies" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">Movies</a></li>
+              <li><a href="/tvShows" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">Tv-Shows</a></li>
+              <li><a href="/actors" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">Actors</a></li>
               <li><a href="#" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">Contact Us</a></li>
             </ul>
           </div>
