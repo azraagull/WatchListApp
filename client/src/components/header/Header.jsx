@@ -7,6 +7,7 @@ const navigation = [
   { name: 'Home', href: '#', current: true },
   { name: 'Movies', href: '#', current: false },
   { name: 'Tv-Shows', href: '#', current: false },
+  { name: 'Actors', href: '#', current: false },
   { name: 'About', href: '#', current: false },
 ];
 
