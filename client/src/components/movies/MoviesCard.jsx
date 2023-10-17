@@ -1,50 +1,51 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Card} from 'antd';
-const apiURL = 'http://localhost:5500/api/movies'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Card } from "antd";
 const { Meta } = Card;
+const apiURL = "http://localhost:5500/api/movies";
 
-const MovieList = () => {
+const MoviesCard = () => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    // Sunucu tarafındaki API rotasını çağıralım
-    axios.get(apiURL) // Sunucu tarafında belirttiğiniz API rotasına göre güncelleyin
+    axios
+      .get(apiURL)
       .then((response) => {
-        // API'den gelen aktör verilerini state'e kaydedelim
         setMovies(response.data.docs);
       })
       .catch((error) => {
-        console.error('Veri çekme hatası:', error);
+        console.error("Veri çekme hatası:", error);
       });
   }, []);
 
-
   const cardStyle = {
-    width: '200px', // Genişlik
-    marginBottom: '20px', // Alt boşluk
+    width: "200px",
+    height: "320px", // Düzenlemek istediğiniz yüksekliği buradan ayarlayın
+    // marginBottom: "20px",
+  };
+
+  const imageStyle = {
+    objectFit: "cover",
+    width: "100%",
+    height: "100%",
   };
 
   return (
     <div className="container mx-auto mt-4 mb-4">
       <div className="flex flex-wrap">
-        {movies.map(movie => (
+        {movies.map((movie) => (
           <div key={movie._id} className="p-5">
-          <Card
-            hoverable
-            style={cardStyle}
-            cover={<img alt={movie.name} src={movie.poster} />}
-          >
-            <Meta
-              title={movie.name}
-            />
-          </Card>
-        </div>
+            <Card hoverable style={cardStyle}>
+              <div style={{ width: "100%", height: "250px" }}>
+                <img alt={movie.name} src={movie.poster} style={imageStyle} />
+              </div>
+              <Meta title={movie.name} style={{ marginTop: "20px" }} />
+            </Card>
+          </div>
         ))}
       </div>
-      
     </div>
   );
 };
 
-export default MovieList;
+export default MoviesCard;
