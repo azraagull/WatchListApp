@@ -44,7 +44,7 @@ exports.getTvShows = async (req, res) => {
       return {
         imdbId: tvShow.id,
         titleType: tvShow.titleType.text,
-        name: tvShow.titleText.text
+        name: tvShow.titleText.text,
       };
     });
     await TvShow.insertMany(transformedTvShows);
@@ -56,17 +56,16 @@ exports.getTvShows = async (req, res) => {
 };
 exports.getTvShowDetails = async (req, res) => {
   try {
-    const tvShows = await TvShow.find(); // Movie koleksiyonundaki tüm filmleri getir
+    const tvShows = await TvShow.find(); 
     // const apiKey = 'e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b';
-    const apiKey = 'a3a60537';
+    const apiKey = "a3a60537";
 
+    let errorCount = 0; 
 
-    let errorCount = 0; // Hata sayacı
-
-    for (let i = 2000; i < 1000; i++) {
-      const tvShowId = tvShows[i].imdbId; // Koleksiyondaki filmin OMDb ID'sini alın
+    for (let i = 0; i < 10; i++) {
+      const tvShowId = tvShows[i].imdbId; 
       const options = {
-        method: 'GET',
+        method: "GET",
         url: `http://www.omdbapi.com/?i=${tvShowId}&apikey=${apiKey}`,
         // url: `https://moviesminidatabase.p.rapidapi.com/movie/id/${movieId}`,
         // headers: {
@@ -79,23 +78,61 @@ exports.getTvShowDetails = async (req, res) => {
         const response = await axios.request(options);
         const tvShowDetails = response.data;
 
-        // TvShow modelinizde details alanını güncelleyin
-        await TvShow.updateOne({ imdbId: tvShowId }, { $set: { year: tvShowDetails.Year, released: tvShowDetails.Released, runTime: tvShowDetails.Runtime, poster: tvShowDetails.Poster, rating: tvShowDetails.imdbRating, vote: tvShowDetails.imdbVotes, genres: tvShowDetails.Genre, plot:tvShowDetails.Plot,
-        director: tvShowDetails.Director, Writer: tvShowDetails.Writer, actors: tvShowDetails.Actors, seasons: tvShowDetails.totalSeasons } });
+        const year =
+          tvShowDetails.Year === "N/A"
+            ? null
+            : parseInt(tvShowDetails.Year, 10);
+        const released =
+          tvShowDetails.Released === "N/A"
+            ? null
+            : new Date(tvShowDetails.Released);
+        const rating =
+          tvShowDetails.imdbRating === "N/A"
+            ? null
+            : parseFloat(tvShowDetails.imdbRating);
+        const vote =
+          tvShowDetails.imdbVotes === "N/A"
+            ? null
+            : parseFloat(tvShowDetails.imdbVotes);
+        const seasons =
+          tvShowDetails?.totalSeasons === "N/A"
+            ? null
+            : parseFloat(tvShowDetails.totalSeasons) || null;
+        await TvShow.updateOne(
+          { imdbId: tvShowId },
+          {
+            $set: {
+              year: year,
+              released: released,
+              runTime: tvShowDetails.Runtime  === "N/A" ? null : tvShowDetails.Runtime,
+              poster: tvShowDetails.Poster  === "N/A" ? null : tvShowDetails.Poster,
+              rating: rating,
+              vote: vote,
+              genres: tvShowDetails.Genre  === "N/A" ? null : tvShowDetails.Genre.split(','),
+              plot: tvShowDetails.Plot,
+              director: tvShowDetails.Director  === "N/A" ? null : tvShowDetails.Director.split(','),
+              Writer: tvShowDetails.Writer  === "N/A" ? null : tvShowDetails.Actors.split(','),
+              actors: tvShowDetails.Actors  === "N/A" ? null : tvShowDetails.Actors.split(','),
+              seasons: seasons,
+            },
+          }
+        );
       } catch (error) {
         console.error(`ID ${tvShowId} için hata: `, error);
-        errorCount++; // Hata sayacını artırın
+        errorCount++; 
       }
     }
 
     if (errorCount === 0) {
-      res.json({ message: 'Detaylar başarıyla eklendi' });
+      res.json({ message: "Detaylar başarıyla eklendi" });
     } else {
-      res.status(500).json({ error: `Toplam ${errorCount} dizide hata oluştu` });
+      res
+        .status(500)
+        .json({ error: `Toplam ${errorCount} dizide hata oluştu` });
     }
   } catch (error) {
-    console.error('Hata:', error);
-    return res.status(500).json({ error: 'Detayları alma hatası' });
+    console.error("Hata:", error);
+    return res.status(500).json({ error: "Detayları alma hatası" });
   }
 };
 

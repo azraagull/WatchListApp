@@ -3,8 +3,8 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import MoviesPage from "./pages/moviesPage";
 import HomePage from "./pages/homePage";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
 
 function App() {
   return (

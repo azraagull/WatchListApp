@@ -44,7 +44,7 @@ exports.getMovies = async (req, res) => {
       return {
         imdbId: movie.id,
         titleType: movie.titleType.text,
-        name: movie.titleText.text
+        name: movie.titleText.text,
       };
     });
     await Movie.insertMany(transformedMovies);
@@ -56,17 +56,16 @@ exports.getMovies = async (req, res) => {
 };
 exports.getMovieDetails = async (req, res) => {
   try {
-    const movies = await Movie.find(); // Movie koleksiyonundaki tüm filmleri getir
+    const movies = await Movie.find();
     // const apiKey = 'e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b';
-    const apiKey = 'a3a60537';
-
+    const apiKey = "a3a60537";
 
     let errorCount = 0; // Hata sayacı
 
-    for (let i = 1000; i < 2000; i++) {
-      const movieId = movies[i].imdbId; // Koleksiyondaki filmin OMDb ID'sini alın
+    for (let i = 10; i < 20; i++) {
+      const movieId = movies[i].imdbId;
       const options = {
-        method: 'GET',
+        method: "GET",
         url: `http://www.omdbapi.com/?i=${movieId}&apikey=${apiKey}`,
         // url: `https://moviesminidatabase.p.rapidapi.com/movie/id/${movieId}`,
         // headers: {
@@ -78,24 +77,55 @@ exports.getMovieDetails = async (req, res) => {
       try {
         const response = await axios.request(options);
         const movieDetails = response.data;
+        const year =
+          movieDetails.Year === "N/A" ? null : parseInt(movieDetails.Year, 10);
+        const released =
+          movieDetails.Released === "N/A"
+            ? null
+            : new Date(movieDetails.Released);
+        const rating =
+          movieDetails.imdbRating === "N/A"
+            ? null
+            : parseFloat(movieDetails.imdbRating);
+        const vote =
+          movieDetails.imdbVotes === "N/A"
+            ? null
+            : parseFloat(movieDetails.imdbVotes);
 
-        // Movie modelinizde details alanını güncelleyin
-        await Movie.updateOne({ imdbId: movieId }, { $set: { year: movieDetails.Year, released: movieDetails.Released, runTime: movieDetails.Runtime, poster: movieDetails.Poster, rating: movieDetails.imdbRating, vote: movieDetails.imdbVotes, genres: movieDetails.Genre, plot:movieDetails.Plot,
-        director: movieDetails.Director, Writer: movieDetails.Writer, actors: movieDetails.Actors } });
+        await Movie.updateOne(
+          { imdbId: movieId },
+          {
+            $set: {
+              year: year,
+              released: released,
+              runTime: movieDetails.Runtime  === "N/A" ? null : movieDetails.Runtime,
+              poster: movieDetails.Poster  === "N/A" ? null : movieDetails.Poster,
+              rating: rating,
+              vote: vote, 
+              genres: movieDetails.Genre  === "N/A" ? null : movieDetails.Genre.split(','),
+              plot: movieDetails.Plot  === "N/A" ? null : movieDetails.Plot,
+              director: movieDetails.Director  === "N/A" ? null : movieDetails.Director.split(','),
+              Writer: movieDetails.Writer  === "N/A" ? null : movieDetails.Writer.split(','),
+              actors: movieDetails.Actors  === "N/A" ? null : movieDetails.Actors.split(','),
+            },
+          }
+        );
       } catch (error) {
         console.error(`ID ${movieId} için hata: `, error);
-        errorCount++; // Hata sayacını artırın
+        errorCount++;
       }
     }
 
     if (errorCount === 0) {
-      res.json({ message: 'Detaylar başarıyla eklendi' });
+      res.json({ message: "Detaylar başarıyla eklendi" });
     } else {
-      res.status(500).json({ error: `Toplam ${errorCount} filmde hata oluştu` });
+      res
+        .status(500)
+        .json({ error: `Toplam ${errorCount} filmde hata oluştu` });
     }
   } catch (error) {
-    console.error('Hata:', error);
-    return res.status(500).json({ error: 'Detayları alma hatası' });
+    console.error("Hata:", error);
+    return res.status(500).json({ error: "Detayları alma hatası" });
   }
 };
 
