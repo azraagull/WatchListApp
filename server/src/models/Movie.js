@@ -3,7 +3,7 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 
 const MovieSchema = new mongoose.Schema(
   {
-    imdbId: { type: String, required: true},
+    imdbId: { type: String, required: true },
     titleType: { type: String, required: true },
     name: { type: String, required: true },
     year: { type: Number },
@@ -16,7 +16,7 @@ const MovieSchema = new mongoose.Schema(
     plot: { type: String },
     director: { type: Array },
     writer: { type: Array },
-    actors: { type: Array }
+    actors: { type: Array },
   },
   { timestamps: true }
 );

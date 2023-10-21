@@ -1,10 +1,12 @@
 import React from "react";
-import MoviesCard from "../components/movies/MoviesCard";
+import MovieList from "../components/movies/MoviesCard";
+import LatestMovies from "../components/movies/LatestMovies";
 
 const moviesPage = () => {
   return (
     <div>
-      <MoviesCard />
+      <MovieList />
+      <LatestMovies />
     </div>
   );
 };
