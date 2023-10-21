@@ -116,8 +116,8 @@ exports.getActorMoviesKnownFor = async (req, res) => {
     const apiKey = "e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b";
 
     let errorCount = 0;
-//0-97 arası eklendi
-    for (let i = 197; i < 300; i++) {
+//0-300 arası eklendi
+    for (let i = 300; i < 400; i++) {
       const imdbId = actors[i].imdbId;
       const options = {
         method: "GET",
@@ -160,8 +160,8 @@ exports.getActorSeriesKnownFor = async (req, res) => {
     const apiKey = "e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b";
 
     let errorCount = 0;
-//eklenmedi
-    for (let i = 0; i < 10; i++) {
+//0-200
+    for (let i = 0; i < 200; i++) {
       const imdbId = actors[i].imdbId;
       const options = {
         method: "GET",
