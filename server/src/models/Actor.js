@@ -3,14 +3,14 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 
 const ActorSchema = new mongoose.Schema(
   {
-    nconst: String,
-    primaryName: String,
+    imdbId: String,
+    name: String,
     birthYear: String,
     deathYear: String,
-    primaryProfession: String,
-    knownForTitles: String,
+    primaryProfession: Array,
+    popularTitles: Array,
     image:String,
-    birthDate:String,
+    birthDate:Date,
     birthPlace:String,
     height:String,
     sign:String,

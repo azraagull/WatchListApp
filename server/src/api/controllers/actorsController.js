@@ -37,7 +37,18 @@ exports.getActors = async (req, res) => {
 
       const response = await axios.request(apiOptions);
       const actors = response.data.results;
-      allActors = allActors.concat(actors);
+      const transformedActors = actors.map((actor) => {
+        return {
+          imdbId: actor.nconst,
+          name: actor.primaryName,
+          birthYear: actor.birthYear,
+          deathYear: actor.deathYear,
+          primaryProfession: actor.primaryProfession.split(','),
+          popularTitles: actor.knownForTitles.split(','),
+        };
+      });
+
+      allActors = allActors.concat(transformedActors);
     }
 
     await Actor.insertMany(allActors);
@@ -53,12 +64,12 @@ exports.getActorDetails = async (req, res) => {
     const apiKey = "e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b";
 
     let errorCount = 0;
-
-    for (let i = 1200; i < 1600; i++) {
-      const actorId = actors[i].nconst;
+//0-100 eklendi
+    for (let i = 0; i < 100; i++) {
+      const imdbId = actors[i].imdbId;
       const options = {
         method: "GET",
-        url: `https://moviesminidatabase.p.rapidapi.com/actor/id/${actorId}`,
+        url: `https://moviesminidatabase.p.rapidapi.com/actor/id/${imdbId}`,
         headers: {
           "X-RapidAPI-Key": apiKey,
           "X-RapidAPI-Host": "moviesminidatabase.p.rapidapi.com",
@@ -68,13 +79,12 @@ exports.getActorDetails = async (req, res) => {
       try {
         const response = await axios.request(options);
         const actorDetails = response.data.results;
-        const birthDate = new Date(actorDetails.birth_date);
         await Actor.updateOne(
-          { nconst: actorId },
+          { imdbId: imdbId },
           {
             $set: {
               image: actorDetails.image_url,
-              birthDate: birthDate,
+              birthDate: actorDetails.birth_date ? new Date(actorDetails.birth_date) : undefined,
               birthPlace: actorDetails.birth_place,
               height: actorDetails.height,
               sign: actorDetails.star_sign,
@@ -83,7 +93,7 @@ exports.getActorDetails = async (req, res) => {
           }
         );
       } catch (error) {
-        console.error(`ID ${actorId} için hata: `, error);
+        console.error(`ID ${imdbId} için hata: `, error);
         errorCount++;
       }
     }
@@ -106,12 +116,12 @@ exports.getActorMoviesKnownFor = async (req, res) => {
     const apiKey = "e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b";
 
     let errorCount = 0;
-
-    for (let i = 0; i < 10; i++) {
-      const actorId = actors[i].nconst;
+//0-97 arası eklendi
+    for (let i = 197; i < 300; i++) {
+      const imdbId = actors[i].imdbId;
       const options = {
         method: "GET",
-        url: `https://moviesminidatabase.p.rapidapi.com/actor/id/${actorId}/movies_knownFor/`,
+        url: `https://moviesminidatabase.p.rapidapi.com/actor/id/${imdbId}/movies_knownFor/`,
         headers: {
           "X-RapidAPI-Key": apiKey,
           "X-RapidAPI-Host": "moviesminidatabase.p.rapidapi.com",
@@ -123,11 +133,11 @@ exports.getActorMoviesKnownFor = async (req, res) => {
         const actorData = response.data.results.map((result) => result[0]);
 
         await Actor.updateOne(
-          { nconst: actorId },
+          { imdbId: imdbId },
           { $set: { moviesKnownFor: actorData } }
         );
       } catch (error) {
-        console.error(`ID ${actorId} için hata: `, error);
+        console.error(`ID ${imdbId} için hata: `, error);
         errorCount++;
       }
     }
@@ -150,12 +160,12 @@ exports.getActorSeriesKnownFor = async (req, res) => {
     const apiKey = "e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b";
 
     let errorCount = 0;
-
+//eklenmedi
     for (let i = 0; i < 10; i++) {
-      const actorId = actors[i].nconst;
+      const imdbId = actors[i].imdbId;
       const options = {
         method: "GET",
-        url: `https://moviesminidatabase.p.rapidapi.com/actor/id/${actorId}/series_knownFor/`,
+        url: `https://moviesminidatabase.p.rapidapi.com/actor/id/${imdbId}/series_knownFor/`,
         headers: {
           "X-RapidAPI-Key": apiKey,
           "X-RapidAPI-Host": "moviesminidatabase.p.rapidapi.com",
@@ -167,11 +177,11 @@ exports.getActorSeriesKnownFor = async (req, res) => {
         const actorData = response.data.results.map((result) => result[0]);
 
         await Actor.updateOne(
-          { nconst: actorId },
+          { imdbId: imdbId },
           { $set: { seriesKnownFor: actorData } }
         );
       } catch (error) {
-        console.error(`ID ${actorId} için hata: `, error);
+        console.error(`ID ${imdbId} için hata: `, error);
         errorCount++;
       }
     }
@@ -189,7 +199,7 @@ exports.getActorSeriesKnownFor = async (req, res) => {
   }
 };
 exports.getActorById = async (req, res) => {
-  const actorId = req.params.id;
+  const imdbId = req.params.id;
 
   const options = {
     method: "GET",

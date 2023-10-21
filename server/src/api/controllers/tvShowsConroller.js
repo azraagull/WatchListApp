@@ -61,8 +61,8 @@ exports.getTvShowDetails = async (req, res) => {
     const apiKey = "a3a60537";
 
     let errorCount = 0; 
-
-    for (let i = 0; i < 10; i++) {
+//0-500 arasına istek atıldı
+    for (let i = 0; i < 500; i++) {
       const tvShowId = tvShows[i].imdbId; 
       const options = {
         method: "GET",
