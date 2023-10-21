@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Card, Pagination } from 'antd';
-const apiURL = 'http://localhost:5500/api/movies';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Card, Pagination } from "antd";
+const apiURL = "http://localhost:5500/api/movies";
 const { Meta } = Card;
-
 
 const MoviesCard = () => {
   const [movies, setMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 50;
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +23,7 @@ const MoviesCard = () => {
         setMovies(response.data.docs);
         setTotalPages(response.data.totalPages);
       } catch (error) {
-        console.error('Veri çekme hatası:', error);
+        console.error("Veri çekme hatası:", error);
       }
     };
 
@@ -41,24 +40,28 @@ const MoviesCard = () => {
     objectFit: "cover",
     width: "100%",
     height: "100%",
-  }
+  };
 
   return (
-    <div className="container mx-auto mt-4 mb-4">
-      <div className="flex flex-wrap">
-        {movies.map((movie) => (
-          <div key={movie._id} className="p-5">
-            <Card hoverable style={cardStyle}>
-              <div style={{ width: "100%", height: "250px" }}>
-                <img alt={movie.name} src={movie.poster} style={imageStyle} />
-              </div>
-              <Meta title={movie.name} style={{ marginTop: "20px" }} />
-            </Card>
-          </div>
-        ))}
+    <div>
+      <div className="container mx-auto mt-4 mb-4">
+        <div className="flex flex-wrap">
+          {movies.map((movie) => (
+            <div key={movie._id} className="p-5">
+              <Card hoverable style={cardStyle}>
+                <div style={{ width: "100%", height: "250px" }}>
+                  <img alt={movie.name} src={movie.poster} style={imageStyle} />
+                </div>
+                <Meta title={movie.name} style={{ marginTop: "10px" }} />
+              </Card>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="pagination-container items-center justify-between">
+      <div className="pagination-container flex items-center justify-center">
+        {" "}
+        {/* Orta hizalama için 'justify-center' ekledik */}
         <Pagination
           current={currentPage}
           total={totalPages * itemsPerPage}

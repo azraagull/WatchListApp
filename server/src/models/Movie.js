@@ -16,7 +16,7 @@ const MovieSchema = new mongoose.Schema(
     plot: { type: String },
     director: { type: Array },
     writer: { type: Array },
-    actors: { type: Array }
+    actors: { type: Array },
   },
   { timestamps: true }
 );
