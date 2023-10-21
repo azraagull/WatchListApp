@@ -61,7 +61,7 @@ exports.getMovieDetails = async (req, res) => {
     const apiKey = "a3a60537";
 
     let errorCount = 0; // Hata sayacı
-//0-500 arasına istek atıldı
+    //0-500 arasına istek atıldı
     for (let i = 500; i < 1000; i++) {
       const movieId = movies[i].imdbId;
       const options = {
@@ -98,15 +98,29 @@ exports.getMovieDetails = async (req, res) => {
             $set: {
               year: year,
               released: released,
-              runTime: movieDetails.Runtime  === "N/A" ? null : movieDetails.Runtime,
-              poster: movieDetails.Poster  === "N/A" ? null : movieDetails.Poster,
+              runTime:
+                movieDetails.Runtime === "N/A" ? null : movieDetails.Runtime,
+              poster:
+                movieDetails.Poster === "N/A" ? null : movieDetails.Poster,
               rating: rating,
-              vote: vote, 
-              genres: movieDetails.Genre  === "N/A" ? null : movieDetails.Genre.split(','),
-              plot: movieDetails.Plot  === "N/A" ? null : movieDetails.Plot,
-              director: movieDetails.Director  === "N/A" ? null : movieDetails.Director.split(','),
-              Writer: movieDetails.Writer  === "N/A" ? null : movieDetails.Writer.split(','),
-              actors: movieDetails.Actors  === "N/A" ? null : movieDetails.Actors.split(','),
+              vote: vote,
+              genres:
+                movieDetails.Genre === "N/A"
+                  ? null
+                  : movieDetails.Genre.split(","),
+              plot: movieDetails.Plot === "N/A" ? null : movieDetails.Plot,
+              director:
+                movieDetails.Director === "N/A"
+                  ? null
+                  : movieDetails.Director.split(","),
+              Writer:
+                movieDetails.Writer === "N/A"
+                  ? null
+                  : movieDetails.Writer.split(","),
+              actors:
+                movieDetails.Actors === "N/A"
+                  ? null
+                  : movieDetails.Actors.split(","),
             },
           }
         );
