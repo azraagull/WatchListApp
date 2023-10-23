@@ -60,10 +60,11 @@ exports.getTvShowDetails = async (req, res) => {
     // const apiKey = 'e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b';
     const apiKey = "7dafd82";
 
-    let errorCount = 0;
-    //0-1480 arasına istek atıldı
-    for (let i = 500; i < 1000; i++) {
-      const tvShowId = tvShows[i].imdbId;
+    let errorCount = 0; 
+//0-2500 arasına istek atıldı
+    for (let i = 1500; i < 2500
+      ; i++) {
+      const tvShowId = tvShows[i].imdbId; 
       const options = {
         method: "GET",
         url: `http://www.omdbapi.com/?i=${tvShowId}&apikey=${apiKey}`,
