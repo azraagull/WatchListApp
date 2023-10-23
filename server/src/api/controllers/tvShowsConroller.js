@@ -56,14 +56,14 @@ exports.getTvShows = async (req, res) => {
 };
 exports.getTvShowDetails = async (req, res) => {
   try {
-    const tvShows = await TvShow.find(); 
+    const tvShows = await TvShow.find();
     // const apiKey = 'e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b';
-    const apiKey = "a3a60537";
+    const apiKey = "7dafd82";
 
-    let errorCount = 0; 
-//0-500 arasına istek atıldı
-    for (let i = 0; i < 500; i++) {
-      const tvShowId = tvShows[i].imdbId; 
+    let errorCount = 0;
+    //0-1480 arasına istek atıldı
+    for (let i = 500; i < 1000; i++) {
+      const tvShowId = tvShows[i].imdbId;
       const options = {
         method: "GET",
         url: `http://www.omdbapi.com/?i=${tvShowId}&apikey=${apiKey}`,
@@ -104,22 +104,36 @@ exports.getTvShowDetails = async (req, res) => {
             $set: {
               year: year,
               released: released,
-              runTime: tvShowDetails.Runtime  === "N/A" ? null : tvShowDetails.Runtime,
-              poster: tvShowDetails.Poster  === "N/A" ? null : tvShowDetails.Poster,
+              runTime:
+                tvShowDetails.Runtime === "N/A" ? null : tvShowDetails.Runtime,
+              poster:
+                tvShowDetails.Poster === "N/A" ? null : tvShowDetails.Poster,
               rating: rating,
               vote: vote,
-              genres: tvShowDetails.Genre  === "N/A" ? null : tvShowDetails.Genre.split(','),
+              genres:
+                tvShowDetails.Genre === "N/A"
+                  ? null
+                  : tvShowDetails.Genre.split(","),
               plot: tvShowDetails.Plot,
-              director: tvShowDetails.Director  === "N/A" ? null : tvShowDetails.Director.split(','),
-              Writer: tvShowDetails.Writer  === "N/A" ? null : tvShowDetails.Actors.split(','),
-              actors: tvShowDetails.Actors  === "N/A" ? null : tvShowDetails.Actors.split(','),
+              director:
+                tvShowDetails.Director === "N/A"
+                  ? null
+                  : tvShowDetails.Director.split(","),
+              Writer:
+                tvShowDetails.Writer === "N/A"
+                  ? null
+                  : tvShowDetails.Actors.split(","),
+              actors:
+                tvShowDetails.Actors === "N/A"
+                  ? null
+                  : tvShowDetails.Actors.split(","),
               seasons: seasons,
             },
           }
         );
       } catch (error) {
         console.error(`ID ${tvShowId} için hata: `, error);
-        errorCount++; 
+        errorCount++;
       }
     }
 

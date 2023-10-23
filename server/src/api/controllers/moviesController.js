@@ -58,11 +58,11 @@ exports.getMovieDetails = async (req, res) => {
   try {
     const movies = await Movie.find();
     // const apiKey = 'e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b';
-    const apiKey = "a3a60537";
+    const apiKey = "7dafd82";
 
     let errorCount = 0; // Hata sayacı
-    //0-500 arasına istek atıldı
-    for (let i = 500; i < 1000; i++) {
+    //0-1700 arasına istek atıldı
+    for (let i = 1500; i < 1700; i++) {
       const movieId = movies[i].imdbId;
       const options = {
         method: "GET",
@@ -167,5 +167,19 @@ exports.getMovieById = async (req, res) => {
   } catch (error) {
     console.error("Hata:", error);
     return res.status(500).json({ error: "Veri çekme hatası" });
+  }
+};
+
+exports.getLatestMovies = async (req, res) => {
+  try {
+    // Son çıkan filmleri, "released" alanına göre sıralayarak getirin ve ilk 10 filmden oluşan bir liste döndürün
+    const latestMovies = await Movie.find({ released: { $lte: new Date() } })
+      .sort({ released: -1 })
+      .limit(10);
+
+    res.json(latestMovies);
+  } catch (error) {
+    console.error("Hata:", error);
+    return res.status(500).json({ error: "Son çıkan filmleri getirme hatası" });
   }
 };

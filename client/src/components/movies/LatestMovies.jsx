@@ -9,11 +9,14 @@ const LatestMovies = () => {
   useEffect(() => {
     const fetchLatestMovies = async () => {
       try {
-        const response = await axios.get("http://localhost:5500/api/movies", {
-          params: { page: 1 },
-        });
+        const response = await axios.get(
+          "http://localhost:5500/api/movies/latest",
+          {
+            params: { page: 1 },
+          }
+        );
 
-        setMovies(response.data.docs); // "released" alanı zaten doğru veri türünde olduğu için dönüş yapmanıza gerek yok
+        setMovies(response.data); // API yanıtına göre güncellendi
       } catch (error) {
         console.error("Veri çekme hatası:", error);
       }
@@ -31,18 +34,22 @@ const LatestMovies = () => {
           slidesToScroll={4}
           draggable={true}
         >
-          {movies.map((movie, index) => (
-            <div key={index} className="p-3">
-              <Card
-                hoverable
-                className="w-full"
-                cover={<img alt="example" src={movie.poster} />}
-              >
-                <Meta title={movie.name} />
-                <p>Released: {new Date(movie.released).toDateString()}</p>
-              </Card>
-            </div>
-          ))}
+          {movies.length > 0 ? (
+            movies.map((movie, index) => (
+              <div key={index} className="p-3">
+                <Card
+                  hoverable
+                  className="w-full"
+                  cover={<img alt="example" src={movie.poster} />}
+                >
+                  <Meta title={movie.name} />
+                  <p>Released: {new Date(movie.released).toDateString()}</p>
+                </Card>
+              </div>
+            ))
+          ) : (
+            <p>Henüz herhangi bir film bulunamadı.</p>
+          )}
         </Carousel>
       </div>
     </div>

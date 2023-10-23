@@ -45,7 +45,7 @@ const MoviesCard = () => {
   return (
     <div>
       <div className="container mx-auto mt-4 mb-4">
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap justify-center">
           {movies.map((movie) => (
             <div key={movie._id} className="p-5">
               <Card hoverable style={cardStyle}>

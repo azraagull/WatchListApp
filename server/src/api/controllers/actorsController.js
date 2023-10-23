@@ -1,7 +1,7 @@
 const axios = require("axios");
 const Actor = require("../../models/Actor.js");
 
-const apiKey = "e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b";
+const apiKey = "2cf7318c1amshb225b5248b1194ap182bebjsn49663724f345";
 const host = "moviesdatabase.p.rapidapi.com";
 
 const limitPerPage = 50;
@@ -43,8 +43,8 @@ exports.getActors = async (req, res) => {
           name: actor.primaryName,
           birthYear: actor.birthYear,
           deathYear: actor.deathYear,
-          primaryProfession: actor.primaryProfession.split(','),
-          popularTitles: actor.knownForTitles.split(','),
+          primaryProfession: actor.primaryProfession.split(","),
+          popularTitles: actor.knownForTitles.split(","),
         };
       });
 
@@ -61,11 +61,9 @@ exports.getActors = async (req, res) => {
 exports.getActorDetails = async (req, res) => {
   try {
     const actors = await Actor.find();
-    const apiKey = "e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b";
-
     let errorCount = 0;
-//0-100 eklendi
-    for (let i = 0; i < 100; i++) {
+    //0-500 eklendi
+    for (let i = 100; i < 500; i++) {
       const imdbId = actors[i].imdbId;
       const options = {
         method: "GET",
@@ -84,7 +82,9 @@ exports.getActorDetails = async (req, res) => {
           {
             $set: {
               image: actorDetails.image_url,
-              birthDate: actorDetails.birth_date ? new Date(actorDetails.birth_date) : undefined,
+              birthDate: actorDetails.birth_date
+                ? new Date(actorDetails.birth_date)
+                : undefined,
               birthPlace: actorDetails.birth_place,
               height: actorDetails.height,
               sign: actorDetails.star_sign,
@@ -113,10 +113,8 @@ exports.getActorDetails = async (req, res) => {
 exports.getActorMoviesKnownFor = async (req, res) => {
   try {
     const actors = await Actor.find();
-    const apiKey = "e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b";
-
     let errorCount = 0;
-//0-300 arası eklendi
+    //0-300 arası eklendi
     for (let i = 300; i < 400; i++) {
       const imdbId = actors[i].imdbId;
       const options = {
@@ -157,11 +155,10 @@ exports.getActorMoviesKnownFor = async (req, res) => {
 exports.getActorSeriesKnownFor = async (req, res) => {
   try {
     const actors = await Actor.find();
-    const apiKey = "e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b";
-
     let errorCount = 0;
-//0-200
-    for (let i = 0; i < 200; i++) {
+    //0-200
+    for (let i = 200; i < 500; i++) {
+      // You have exceeded the rate limit per hour for your plan, BASIC, by the API provider
       const imdbId = actors[i].imdbId;
       const options = {
         method: "GET",
