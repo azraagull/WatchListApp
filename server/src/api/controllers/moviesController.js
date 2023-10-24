@@ -61,8 +61,8 @@ exports.getMovieDetails = async (req, res) => {
     const apiKey = "7dafd82";
 
     let errorCount = 0; // Hata sayacı
-    //0-1700 arasına istek atıldı
-    for (let i = 1500; i < 1700; i++) {
+    //0-2500 arasına istek atıldı
+    for (let i = 2000; i < 2500; i++) {
       const movieId = movies[i].imdbId;
       const options = {
         method: "GET",

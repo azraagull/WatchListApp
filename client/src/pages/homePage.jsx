@@ -1,12 +1,17 @@
 import React from 'react';
-import { Carousel, Card, Row, Col } from 'antd';
+import { Carousel, Card, Row, Col,Button } from 'antd';
 
 function HomePage() {
+    const carouselSettings = {
+      autoplay: true,
+      prevArrow: <Button icon="left" />,
+      nextArrow: <Button icon="right" />,
+    };
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
       <Row gutter={16}>
         <Col span={16}>
-          <Carousel autoplay>
+          <Carousel {...carouselSettings}>
             <div className="relative">
               <img
                 src="https://hips.hearstapps.com/hmg-prod/images/classic-movies-1661199935.jpg?crop=1.00xw:0.502xh;0,0&resize=1200:*"
