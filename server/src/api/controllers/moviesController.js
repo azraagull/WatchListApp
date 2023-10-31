@@ -184,22 +184,22 @@ exports.getLatestMovies = async (req, res) => {
   }
 };
 
-// exports.getMoviesByGenres = async (req, res) => {
-//   try {
-//     const selectedGenres = req.query.genres; // Kullanıcının seçtiği kategoriler
-//     const page = req.query.page || 1;
+exports.getMoviesByGenres = async (req, res) => {
+  try {
+    const selectedGenres = req.query.genres; // Kullanıcının seçtiği kategoriler
+    const page = req.query.page || 1;
 
-//     const paginateOptions = {
-//       page: page,
-//       limit: limitPerPage,
-//     };
+    const paginateOptions = {
+      page: page,
+      limit: limitPerPage,
+    };
 
-//     const query = { genres: { $in: selectedGenres } }; // Seçilen kategorilere göre filtrele
+    const query = { genres: { $in: selectedGenres } }; // Seçilen kategorilere göre filtrele
 
-//     const filteredMovies = await Movie.paginate(query, paginateOptions);
-//     res.json(filteredMovies);
-//   } catch (error) {
-//     console.error("Hata:", error);
-//     return res.status(500).json({ error: "Veri çekme hatası" });
-//   }
-// };
+    const filteredMovies = await Movie.paginate(query, paginateOptions);
+    res.json(filteredMovies);
+  } catch (error) {
+    console.error("Hata:", error);
+    return res.status(500).json({ error: "Veri çekme hatası" });
+  }
+};
