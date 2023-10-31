@@ -73,7 +73,7 @@ const Header = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start md:flex hidden ">
+              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start lg:flex hidden  ">
                 <div className="relative flex w-full">
                   <input
                     type="text"

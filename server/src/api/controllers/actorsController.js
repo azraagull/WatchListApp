@@ -62,8 +62,8 @@ exports.getActorDetails = async (req, res) => {
   try {
     const actors = await Actor.find();
     let errorCount = 0;
-    //0-500 eklendi
-    for (let i = 100; i < 500; i++) {
+    //0-992 eklendi
+    for (let i = 992; i < 1000; i++) {
       const imdbId = actors[i].imdbId;
       const options = {
         method: "GET",
@@ -114,8 +114,8 @@ exports.getActorMoviesKnownFor = async (req, res) => {
   try {
     const actors = await Actor.find();
     let errorCount = 0;
-    //0-500 arası eklendi
-    for (let i = 300; i < 600; i++) {
+    //0-700 arası eklendi
+    for (let i = 500; i < 700; i++) {
       const imdbId = actors[i].imdbId;
       const options = {
         method: "GET",
@@ -156,8 +156,8 @@ exports.getActorSeriesKnownFor = async (req, res) => {
   try {
     const actors = await Actor.find();
     let errorCount = 0;
-    //0-500 atıldı
-    for (let i = 200; i < 500; i++) {
+    //0-700 atıldı
+    for (let i = 500; i < 700; i++) {
       // You have exceeded the rate limit per hour for your plan, BASIC, by the API provider
       const imdbId = actors[i].imdbId;
       const options = {
