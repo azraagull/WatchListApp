@@ -7,6 +7,7 @@ const actorRoute = require("./src/api/routes/actors.js");
 const movieRoute = require("./src/api/routes/movies.js");
 const categoryRoute = require("./src/api/routes/categories.js");
 const tvShowRoute = require("./src/api/routes/tvShows.js");
+const userRoute = require("./src/api/routes/users.js");
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use("/api", actorRoute);
 app.use("/api", movieRoute);
 app.use("/api", categoryRoute);
 app.use("/api", tvShowRoute);
+app.use("/api", userRoute);
 
 connectToDatabase();
 

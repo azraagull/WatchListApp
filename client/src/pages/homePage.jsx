@@ -8,12 +8,12 @@ function HomePage() {
     nextArrow: <Button icon="right" />,
   };
   const features = [
-    { name: 'Add the desired movie to your favorites list.', description: 'Designed by Good Goods, Inc.' },
-    { name: 'Add it to your watched list while watching', description: 'Solid walnut base with rare earth magnets and powder coated steel card cover' },
-    { name: 'Mark where you left off.', description: '6.25" x 3.55" x 1.15"' },
-    { name: 'Write episode-end reviews.', description: 'Hand sanded and finished with natural oil' },
-    { name: 'Come back and check when you want to remember.', description: 'Wood card tray and 3 refill packs' },
-    { name: 'Share with your friends.', description: 'Made from natural materials. Grain and color vary with each item.' },
+    { name: 'Add to Fav List', description: 'Add the desired movie to your favorites list' },
+    { name: 'Move to Watch List', description: 'Add it to your watched list while watching' },
+    { name: 'Mark It', description: 'Mark where you left off.' },
+    { name: 'Write Review', description: 'Write episode-end reviews.' },
+    { name: 'Check It', description: 'Come back and check when you want to remember.' },
+    { name: 'Share to Friends', description: 'Share with your friends.' },
   ]
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
