@@ -4,30 +4,34 @@ const Category = require("../../models/Category.js");
 const apiKey = "e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b";
 const host = "moviesdatabase.p.rapidapi.com";
 
-exports.getCategories = async (req, res) => {
-  try {
-    const options = {
-      method: "GET",
-      url: "https://moviesdatabase.p.rapidapi.com/titles/utils/genres",
-      headers: {
-        "X-RapidAPI-Key": apiKey,
-        "X-RapidAPI-Host": host,
-      },
-    };
+// exports.getCategories = async (req, res) => {
+//   try {
+//     const options = {
+//       method: "GET",
+//       url: "https://moviesdatabase.p.rapidapi.com/titles/utils/genres",
+//       headers: {
+//         "X-RapidAPI-Key": apiKey,
+//         "X-RapidAPI-Host": host,
+//       },
+//     };
 
-    const response = await axios.request(options);
+//     const response = await axios.request(options);
 
-    const formattedCategories = response.data.results.map((categoryName) => ({
-      name: categoryName,
-    }));
+//     const formattedCategories = response.data.results.map((categoryName) => ({
+//       name: categoryName,
+//     }));
 
-    await Category.insertMany(formattedCategories);
+//     await Category.insertMany(formattedCategories);
 
-    res.json(formattedCategories);
-  } catch (error) {
-    console.error("Hata:", error);
-    return res
-      .status(500)
-      .json({ error: "Veri çekme hatası", message: error.message });
-  }
-};
+//     res.json(formattedCategories);
+//   } catch (error) {
+//     console.error("Hata:", error);
+//     return res
+//       .status(500)
+//       .json({ error: "Veri çekme hatası", message: error.message });
+//   }
+
+
+
+
+// };
