@@ -4,7 +4,7 @@ const Category = require("../../models/Category.js");
 const apiKey = "e7c680bb91msh7cefc06feb84bf0p16346fjsn68ee6f3b768b";
 const host = "moviesdatabase.p.rapidapi.com";
 
-// exports.getCategories = async (req, res) => {
+exports.getCategories = async (req, res) => {
 //   try {
 //     const options = {
 //       method: "GET",
@@ -29,7 +29,7 @@ const host = "moviesdatabase.p.rapidapi.com";
 //     return res
 //       .status(500)
 //       .json({ error: "Veri çekme hatası", message: error.message });
-//   }
+  }
 
 
 
