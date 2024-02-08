@@ -1,14 +1,14 @@
+require('dotenv').config();
 const User = require("../../models/User");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
-const jwtSecret = 'keyiste';
+const jwtSecret = process.env.JWT_SECRET;
 
 exports.registerUser = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
   try {
-
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
@@ -30,27 +30,29 @@ exports.registerUser = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
 exports.loginUser = async (req, res) => {
-    const { email, password } = req.body;
-  
-    try {
-  
-      const user = await User.findOne({ email });
-  
-      if (!user) {
-        return res.status(400).json({ message: "Kullanıcı bulunamadı." })
-      }
-      const isPasswordValid = await bcrypt.compare(password, user.password);
+  const { email, password } = req.body;
 
-      if (!isPasswordValid) {
-        return res.status(400).json({ message: "Geçersiz şifre." });
-      }
-      const token = jwt.sign({ userId: user._id }, jwtSecret, {
-        expiresIn: "1h",
-      });
-      res.status(200).json({ token });
+  try {
+    const user = await User.findOne({ email });
 
-  }catch (error) {
+    if (!user) {
+      return res.status(400).json({ message: "Kullanıcı bulunamadı." })
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: "Geçersiz şifre." });
+    }
+
+    const token = jwt.sign({ userId: user._id }, jwtSecret, {
+      expiresIn: "1h",
+    });
+
+    res.status(200).json({ token });
+  } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }

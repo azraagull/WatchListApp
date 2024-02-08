@@ -1,8 +1,8 @@
 const axios = require("axios");
 const Actor = require("../../models/Actor.js");
 
-const apiKey = "2cf7318c1amshb225b5248b1194ap182bebjsn49663724f345";
-const host = "moviesdatabase.p.rapidapi.com";
+const apiKey = process.env.RAPIDAPI_KEY;
+const host = process.env.RAPIDAPI_HOST;
 
 const limitPerPage = 50;
 const totalPages = 50;
