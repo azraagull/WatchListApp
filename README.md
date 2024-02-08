@@ -18,8 +18,7 @@ Projenin yerel bir ortamda çalıştırılması için aşağıdaki adımları ta
    ```bash
    cd client
    npm install
-
-   ```bash
+   
    cd server
    npm install
 
